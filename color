@@ -1,0 +1,42 @@
+#!/bin/bash
+
+red=$(tput bold;tput setaf 1)            # bright red text
+green=$(tput setaf 2)                    # dim green text
+yellow=$(tput bold;tput setaf 3)         # bright yellow text
+blue=$(tput bold;tput setaf 4)           # bright blue text
+purple=$(tput setaf 5) ; magenta=$purple # magenta text
+cyan=$(tput bold;tput setaf 6)           # bright cyan text
+white=$(tput bold;tput setaf 7)          # bright white text
+normal=$(tput sgr0)                      # normal text
+highcontrast=${HIGH_CONTRAST_COLOR:-white}
+eval highcontrast=\$${highcontrast}
+
+if [ $# == 0 ]; then
+	echo "Usage:"
+	echo "color <color> '<regexp>'"
+	echo -e "\nMultiple colors and regexps can be used at the same line"
+	echo "Availble colors are:"
+	echo "${red}red"
+	echo "${green}green"
+	echo "${yellow}yellow"
+	echo "${blue}blue"
+	echo "${purple}purple"
+	echo "${cyan}cyan"
+	echo "${white}white"
+        echo "${highcontrast}highcontrast"
+	echo -n "${normal}"
+	exit 0;
+fi
+
+# compile all rules given at command line to 1 set of rules for SED
+while [ "/$1/" != '//' ] ; do
+  # reset variables
+  color=''; regex=''; beep=''
+  # assign parameters from command line to variables and shift the rest
+  color=$1 ; regex="$2" ; shift 2
+  # add the substitute command to the set of rules for SED
+  sedrules="$sedrules;s/\($regex\)/${!color}\1$normal/g"
+done
+ 
+# call sed with the compiled sedrules to do the main job
+sed -e "$sedrules"

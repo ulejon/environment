@@ -1,0 +1,14 @@
+#!/bin/bash
+
+for file in $(find ${SOURCE_ROOT} -maxdepth 3 -type d -name ".git"); do
+		REPO=`dirname ${file}`
+		cd ${REPO}
+		stat=$(git status -s )
+		#echo $file
+		if [[ ! -z "${stat}" ]]; then
+			echo "Repository ${REPO}" | color highcontrast " .*"
+			git status -s
+ 			echo ""
+		fi
+done
+
