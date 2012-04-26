@@ -89,6 +89,21 @@ function run() {
 	${JBOSS4_HOME}/bin/run.sh -c ${SERVER}
 }
 
+function st() {
+	BUILD_ROOT=`pwd`
+	ORIGINAL_BUILD_ROOT=${BUILD_ROOT}
+
+	while [ ! -e ${BUILD_ROOT}/core  ]; do
+		BUILD_ROOT=`dirname ${BUILD_ROOT}`
+		if [ "${BUILD_ROOT}" == "/" ]; then
+			echo "Build root not found from ${ORIGINAL_BUILD_ROOT}"
+			return -1;
+		fi
+	done
+	echo "Using build root: ${BUILD_ROOT}"
+	mvn -Psystemtest -f tests/systemtest/pom.xml
+}
+
 function debug() {
 	SERVER="default"
 	if [ -z "$1" ]; then
@@ -98,6 +113,8 @@ function debug() {
 	fi
 	${JBOSS4_HOME}/bin/debug.sh -c ${SERVER}
 }
+
+
 
 . ${SCRIPT_DIR}/environment.completions
 
