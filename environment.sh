@@ -6,7 +6,7 @@ if [ -z "`echo $PATH | grep ${SCRIPT_DIR}`" ]; then
 fi
 function deploytest() {
 	FILE_LIST=("tests/ear/target/paysol-*.ear" "core/security/target/paysol-*[^sources].jar"  )
-	deployInternal 
+	deployInternal $@
 }
 
 
