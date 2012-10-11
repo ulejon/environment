@@ -41,6 +41,8 @@ function deployInternal() {
 	fi
 
 	SERVER_DEPLOY_PATH=${JBOSS4_HOME}/server/${SERVER}/deploy/
+	SERVER_CONFIFG=${JBOSS4_HOME}/server/${SERVER}/conf/
+
 	echo "Deploying to: ${SERVER_DEPLOY_PATH}"
 
 	for element in $(seq 0 $((${#FILE_LIST[@]} - 1))); do
@@ -91,6 +93,35 @@ function deployInternal() {
 			fi
 		fi
 	done
+
+}
+
+function base() {
+	NEW_SOURCE_ROOT=${SOURCES_ROOT}/$1
+	
+        if [ -z "${NEW_SOURCE_ROOT}" ]; then
+		echo "No path for SOURCE_ROOT specified. Not updating"
+		return 1
+	fi
+        if [ ! -d "${NEW_SOURCE_ROOT}" ]; then
+		echo "Not a valid path [${NEW_SOURCE_ROOT}] for SOURCE_ROOT specified. Not updating"
+		return 1
+	fi
+        if [ "${NEW_SOURCE_ROOT}" == "${SOURCE_ROOT}" ]; then
+		echo "No new path for SOURCE_ROOT specified. Not updating"
+		return 1
+	fi
+
+	echo "Setting SOURCE_ROOT to: ${NEW_SOURCE_ROOT}"
+	export SOURCE_ROOT=${NEW_SOURCE_ROOT}
+	
+	if [ -e "${NEW_SOURCE_ROOT}/.config" ]; then
+		echo "Sourcing config"
+		source "${NEW_SOURCE_ROOT}/.config"
+	fi
+	cd ${SOURCE_ROOT}
+
+
 }
 
 function go() {
@@ -123,7 +154,9 @@ function st() {
 		fi
 	done
 	echo "Using build root: ${BUILD_ROOT}"
+	pushd ${BUILD_ROOT}
 	mvn -Psystemtest -f tests/systemtest/pom.xml
+	popd ${BUILD_ROOT}
 }
 
 function debug() {
@@ -138,7 +171,7 @@ function debug() {
 
 . ${SCRIPT_DIR}/environment.completions
 
-if [ -z "${SOURCE_ROOT}" ]; then
-        echo -en "\E[31;40m\n\nEnvironment variable SOURCE_ROOT is not set.\n\nUpdate your .bashrc!!!\n\n\tEg.\n\texport SOURCE_ROOT=~/Source\n\texport DEFAULT_BASE=${SOURCE_ROOT}/dev\n\n"
+if [ -z "${SOURCES_ROOT}" ]; then
+        echo -en "Environment variable SOURCES_ROOT is not set.\n\nUpdate your .bashrc!!!\n\n\tEg.\n\texport SOURCES_ROOT=~/Source\n"
         tput sgr0
 fi
