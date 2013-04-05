@@ -1,9 +1,50 @@
 #!/bin/bash
 
+# Check environment variables
+ENV_VARIABLES=(JAVA_HOME JBOSS4_HOME, JAVA_HOME7 JAVA_HOME6 SOURCES_ROOT)
+for variable in ${ENV_VARIABLES[*]}
+do
+	value=$(eval "echo \$${variable}")
+	if [ -z ${value} ]; then
+		echo "Environment variable ${variable} is not set"
+		variables_unset="true"
+	fi
+	#debug....echo "${variable}=${value}"
+done
+if [ "true" == "${variables_unset}" ]; then
+	echo "Not all necessary environment variables set, exiting..."
+	return
+fi
+
+
+if [ -z "${JAVA_HOME}" ]; then
+	echo "No JAVA_HOME defined, update for example .bashrc"
+fi
+
+
 SCRIPT_DIR=$(cd "$(dirname "$BASH_SOURCE")" && pwd)
 if [ -z "`echo $PATH | grep ${SCRIPT_DIR}`" ]; then
         export PATH=${PATH}:${SCRIPT_DIR}
 fi
+
+
+function sbt7() {
+	#!/bin/sh
+	test -f ~/.sbtconfig && . ~/.sbtconfig
+	exec ${JAVA_HOME7}/bin/java -Xmx512M ${SBT_OPTS} -jar /usr/local/Cellar/sbt/0.12.3/libexec/sbt-launch.jar "$@"
+}
+
+function setjava() {
+	
+	VERSION=$1
+	if [ -z "${VERSION}" ]; then
+		echo "Must specify version {6,7}"
+		return -1;
+	fi
+	PARAM="JAVA_HOME${VERSION}"
+	export JAVA_HOME=$(eval "echo \$${PARAM}")
+	echo "Set JAVA_HOME to:  ${JAVA_HOME}"
+}
 function deploytest() {
 	FILE_LIST=("tests/ear/target/paysol-*.ear" "core/security/target/paysol-*[^sources].jar"  )
 	deployInternal $@
@@ -13,6 +54,14 @@ function deploytest() {
 function deploy() {
 	FILE_LIST=("core/ear/target/paysol-*.ear" "core/security/target/paysol-*[^sources].jar"  )
 	deployInternal $@
+}
+
+function fast() {
+	mvn install -Pfast.install
+}
+
+function fastclean() {
+	mvn clean install -Pfast.install
 }
 
 function deployInternal() {
@@ -31,8 +80,8 @@ function deployInternal() {
 	fi
 
 	if [ -z "${SERVER}" ]; then
-		echo "Must specify server"
-		return 0;
+		echo "No server specified, using default"
+		SERVER="default"
 	fi
 
 	if [ ! -e ${JBOSS4_HOME}/server/${SERVER} ]; then
