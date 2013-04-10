@@ -56,6 +56,10 @@ function deploy() {
 	deployInternal $@
 }
 
+function install() {
+	mvn clean install
+}
+
 function fast() {
 	mvn install -Pfast.install
 }
