@@ -56,7 +56,11 @@ function deploy() {
 	deployInternal $@
 }
 
-function install() {
+function mi() {
+	mvn install
+}
+
+function mci() {
 	mvn clean install
 }
 
