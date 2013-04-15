@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-PROFILE_REPO="https://github.com/pliljenberg/environment.git"
+ENVIRONMENT_REPO="https://github.com/pliljenberg/environment.git"
 ENVIRONMENT_PATH="tools/environment"
 
 if ! type -p git; then
@@ -10,6 +10,6 @@ fi
 
 cd "$HOME"
 mkdir -p $ENVIRONMENT_PATH
-git clone $PROFILE_REPO $ENVIRONMENT_PATH
+git clone $ENVIRONMENT_REPO $ENVIRONMENT_PATH
 
 echo "Cloned to ${ENVIRONMENT_PATH}"
