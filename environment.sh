@@ -57,19 +57,19 @@ function deploy() {
 }
 
 function mi() {
-	mvn install
+	mvn install "$@"
 }
 
 function mci() {
-	mvn clean install
+	mvn clean install "$@"
 }
 
 function fast() {
-	mvn install -Pfast.install
+	mvn install -Pfast.install "$@"
 }
 
 function fastclean() {
-	mvn clean install -Pfast.install
+	mvn clean install -Pfast.install "$@"
 }
 
 function deployInternal() {
