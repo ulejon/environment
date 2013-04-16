@@ -6,7 +6,7 @@ for file in $(find ${SOURCE_ROOT} -maxdepth 3 -type d -name ".git"); do
 		stat=$(git status -s )
 		#echo $file
 		if [[ ! -z "${stat}" ]]; then
-			echo "Repository ${REPO}" | color highcontrast " .*"
+			echo "Repository ${REPO}" | color purple " .*"
 			git status -s
  			echo ""
 		fi

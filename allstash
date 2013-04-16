@@ -1,15 +1,13 @@
 
 #!/bin/bash
 
-for file in $(find ${SOURCE_ROOT} -maxdepth 1 -type d ); do
-	cd ${file}
-	if [[ -e .git ]]; then
-		stat=$(git status -s)
-		if [[ ! -z "${stat}" ]]; then
-			echo "Repository ${file}" | color highcontrast " .*"
-			git stash list 
-			echo ""
-		fi
+for file in $(find ${SOURCE_ROOT} -maxdepth 3 -type d -name ".git"); do
+	REPO=`dirname ${file}`
+	cd ${REPO}
+	stat=$(git stash list)
+	if [[ ! -z "${stat}" ]]; then
+		echo "Repository ${file}" | color yellow " .*"
+		git stash list 
+		echo ""
 	fi
 done
-
