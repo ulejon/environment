@@ -36,6 +36,7 @@ complete -F _serverlist deploy
 complete -F _serverlist deploytest
 complete -F _serverlist debug
 complete -F _serverlist run
+complete -F _serverlist jboss
 complete -F _go go
-complete -F _base base
+complete -F _base base 
 

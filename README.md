@@ -31,6 +31,7 @@ TBD
 	`st`						- Run systemtest for current source dir
 	`run <instance>`			- Starts JBoss instance`
 	`debug <instance>`			- Starts JBoss instance with debug parameters (invokes `debug.sh` instead of `run.sh`, so configure JBoss accordingly)
+	`jboss <instance>`			- Change dir to `JBOSS4_HOME` or `JBOSS4_HOME/server/instance` if specified
 	`mi <params>`				- Invokes `mvn clean install <params>` in the currect directory
 	`mci <params>`				- Invokes `mvn install <params>` in the current directory
 	`fast <params>`				- Invokes `mvn install -Pfast.install <params>` in the current directory (skips test compile and tests)

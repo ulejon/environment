@@ -29,9 +29,17 @@ fi
 
 
 function sbt7() {
-	#!/bin/sh
 	test -f ~/.sbtconfig && . ~/.sbtconfig
 	exec ${JAVA_HOME7}/bin/java -Xmx512M ${SBT_OPTS} -jar /usr/local/Cellar/sbt/0.12.3/libexec/sbt-launch.jar "$@"
+}
+
+function jboss() {
+	if [ -z "$1" ]; then
+		SERVER=".."
+	else
+		SERVER="$1"
+	fi
+	cd ${JBOSS4_HOME}/server/${SERVER}
 }
 
 function setjava() {
