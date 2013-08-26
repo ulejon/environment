@@ -1,6 +1,7 @@
 #!/bin/bash
 
 # Check environment variables
+variables_unset="false"
 ENV_VARIABLES=(JAVA_HOME JBOSS4_HOME, JAVA_HOME7 JAVA_HOME6 SOURCES_ROOT)
 for variable in ${ENV_VARIABLES[*]}
 do
