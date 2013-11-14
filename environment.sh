@@ -44,7 +44,7 @@ function jboss() {
 }
 
 function setjava() {
-	
+
 	VERSION=$1
 	if [ -z "${VERSION}" ]; then
 		echo "Must specify version {6,7}"
@@ -127,7 +127,7 @@ function deployInternal() {
 		fi
 	done
 	echo "Using build root: ${BUILD_ROOT}"
-	
+
 
 	for element in $(seq 0 $((${#FILE_LIST[@]} - 1))); do
 		if [ ! -e ${BUILD_ROOT}/${FILE_LIST[$element]} ]; then
@@ -164,7 +164,7 @@ function deployInternal() {
 
 function base() {
 	NEW_SOURCE_ROOT=${SOURCES_ROOT}/$1
-	
+
         if [ -z "${NEW_SOURCE_ROOT}" ]; then
 		echo "No path for SOURCE_ROOT specified. Not updating"
 		return 1
@@ -180,7 +180,7 @@ function base() {
 
 	echo "Setting SOURCE_ROOT to: ${NEW_SOURCE_ROOT}"
 	export SOURCE_ROOT=${NEW_SOURCE_ROOT}
-	
+
 	if [ -e "${NEW_SOURCE_ROOT}/.config" ]; then
 		echo "Sourcing config"
 		source "${NEW_SOURCE_ROOT}/.config"
@@ -234,6 +234,11 @@ function debug() {
 	fi
 	${JBOSS4_HOME}/bin/debug.sh -c ${SERVER}
 }
+
+function showjarversion() {
+       unzip -q -c $1 META-INF/MANIFEST.MF
+}
+
 
 . ${SCRIPT_DIR}/environment.completions
 
