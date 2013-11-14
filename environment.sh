@@ -48,7 +48,7 @@ function setjava() {
 	VERSION=$1
 	if [ -z "${VERSION}" ]; then
 		echo "Must specify version {6,7}"
-		return -1;
+		return 
 	fi
 	PARAM="JAVA_HOME${VERSION}"
 	export JAVA_HOME=$(eval "echo \$${PARAM}")
@@ -93,7 +93,7 @@ function deployInternal() {
 
 	if [ -z "${JBOSS4_HOME}" ]; then
 		echo "Must specify JBOSS4_HOME"
-		return 0;
+		return
 	fi
 
 	if [ -z "${SERVER}" ]; then
@@ -103,7 +103,7 @@ function deployInternal() {
 
 	if [ ! -e ${JBOSS4_HOME}/server/${SERVER} ]; then
 		echo "Server ${SERVER} doesn't exist"
-		return -1;
+		return
 	fi
 
 	SERVER_DEPLOY_PATH=${JBOSS4_HOME}/server/${SERVER}/deploy/
@@ -123,7 +123,7 @@ function deployInternal() {
 		BUILD_ROOT=`dirname ${BUILD_ROOT}`
 		if [ "${BUILD_ROOT}" == "/" ]; then
 			echo "Build root not found from ${ORIGINAL_BUILD_ROOT}"
-			return -1;
+			return
 		fi
 	done
 	echo "Using build root: ${BUILD_ROOT}"
@@ -132,7 +132,7 @@ function deployInternal() {
 	for element in $(seq 0 $((${#FILE_LIST[@]} - 1))); do
 		if [ ! -e ${BUILD_ROOT}/${FILE_LIST[$element]} ]; then
 			echo "File not found: ${FILE_LIST[$element]}"
-			return -1
+			return
 		fi
 	done
 
@@ -165,19 +165,18 @@ function deployInternal() {
 function base() {
 	NEW_SOURCE_ROOT=${SOURCES_ROOT}/$1
 
-        if [ -z "${NEW_SOURCE_ROOT}" ]; then
+    if [ -z "${NEW_SOURCE_ROOT}" ]; then
 		echo "No path for SOURCE_ROOT specified. Not updating"
-		return 1
+		return 
 	fi
-        if [ ! -d "${NEW_SOURCE_ROOT}" ]; then
+    if [ ! -d "${NEW_SOURCE_ROOT}" ]; then
 		echo "Not a valid path [${NEW_SOURCE_ROOT}] for SOURCE_ROOT specified. Not updating"
-		return 1
+		return 
 	fi
         if [ "${NEW_SOURCE_ROOT}" == "${SOURCE_ROOT}" ]; then
 		echo "No new path for SOURCE_ROOT specified. Not updating"
-		return 1
+		return 
 	fi
-
 	echo "Setting SOURCE_ROOT to: ${NEW_SOURCE_ROOT}"
 	export SOURCE_ROOT=${NEW_SOURCE_ROOT}
 
@@ -186,14 +185,12 @@ function base() {
 		source "${NEW_SOURCE_ROOT}/.config"
 	fi
 	cd ${SOURCE_ROOT}
-
-
 }
 
 function go() {
         if [ -z "${SOURCE_ROOT}" ]; then
                 echo "ERROR: You must set SOURCE_ROOT to use the go command!" >&2
-                return 0
+                return
         fi
         cd ${SOURCE_ROOT}/$1
 }
@@ -216,7 +213,7 @@ function st() {
 		BUILD_ROOT=`dirname ${BUILD_ROOT}`
 		if [ "${BUILD_ROOT}" == "/" ]; then
 			echo "Build root not found from ${ORIGINAL_BUILD_ROOT}"
-			return -1;
+			return ;
 		fi
 	done
 	echo "Using build root: ${BUILD_ROOT}"
@@ -236,7 +233,7 @@ function debug() {
 }
 
 function showjarversion() {
-       unzip -q -c $1 META-INF/MANIFEST.MF
+	unzip -q -c $1 META-INF/MANIFEST.MF
 }
 
 
