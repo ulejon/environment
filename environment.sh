@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 # Check environment variables
 variables_unset="false"
@@ -12,7 +12,7 @@ do
 	fi
 	#debug....echo "${variable}=${value}"
 done
-if [ "true" = "${variables_unset}" ]; then
+if [ "true" == "${variables_unset}" ]; then
 	echo "Not all necessary environment variables set, exiting..."
 	return
 fi
@@ -23,7 +23,7 @@ if [ -z "${JAVA_HOME}" ]; then
 fi
 
 
-SCRIPT_DIR=$(cd "$(dirname "$0")" && pwd)
+SCRIPT_DIR=$(cd "$(dirname "$BASH_SOURCE")" && pwd)
 if [ -z "`echo $PATH | grep ${SCRIPT_DIR}`" ]; then
         export PATH=${PATH}:${SCRIPT_DIR}
 fi
@@ -121,7 +121,7 @@ function deployInternal() {
 
 	while [ ! -e ${BUILD_ROOT}/core  ]; do
 		BUILD_ROOT=`dirname ${BUILD_ROOT}`
-		if [ "${BUILD_ROOT}"  "/" ]; then
+		if [ "${BUILD_ROOT}" == "/" ]; then
 			echo "Build root not found from ${ORIGINAL_BUILD_ROOT}"
 			return -1;
 		fi
@@ -165,18 +165,19 @@ function deployInternal() {
 function base() {
 	NEW_SOURCE_ROOT=${SOURCES_ROOT}/$1
 
-    if [ -z "${NEW_SOURCE_ROOT}" ]; then
+        if [ -z "${NEW_SOURCE_ROOT}" ]; then
 		echo "No path for SOURCE_ROOT specified. Not updating"
 		return 1
 	fi
-    if [ ! -d "${NEW_SOURCE_ROOT}" ]; then
+        if [ ! -d "${NEW_SOURCE_ROOT}" ]; then
 		echo "Not a valid path [${NEW_SOURCE_ROOT}] for SOURCE_ROOT specified. Not updating"
 		return 1
 	fi
-    if [ "${NEW_SOURCE_ROOT}" = "${SOURCE_ROOT}" ]; then
+        if [ "${NEW_SOURCE_ROOT}" == "${SOURCE_ROOT}" ]; then
 		echo "No new path for SOURCE_ROOT specified. Not updating"
 		return 1
 	fi
+
 	echo "Setting SOURCE_ROOT to: ${NEW_SOURCE_ROOT}"
 	export SOURCE_ROOT=${NEW_SOURCE_ROOT}
 
@@ -185,6 +186,8 @@ function base() {
 		source "${NEW_SOURCE_ROOT}/.config"
 	fi
 	cd ${SOURCE_ROOT}
+
+
 }
 
 function go() {
@@ -211,7 +214,7 @@ function st() {
 
 	while [ ! -e ${BUILD_ROOT}/core  ]; do
 		BUILD_ROOT=`dirname ${BUILD_ROOT}`
-		if [ "${BUILD_ROOT}"  "/" ]; then
+		if [ "${BUILD_ROOT}" == "/" ]; then
 			echo "Build root not found from ${ORIGINAL_BUILD_ROOT}"
 			return -1;
 		fi
@@ -233,8 +236,9 @@ function debug() {
 }
 
 function showjarversion() {
-	unzip -q -c $1 META-INF/MANIFEST.MF
+       unzip -q -c $1 META-INF/MANIFEST.MF
 }
+
 
 . ${SCRIPT_DIR}/environment.completions
 
