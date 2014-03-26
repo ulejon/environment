@@ -25,7 +25,7 @@ fi
 
 SCRIPT_DIR=$(cd "$(dirname "$BASH_SOURCE")" && pwd)
 if [ -z "`echo $PATH | grep ${SCRIPT_DIR}`" ]; then
-        export PATH=${PATH}:${SCRIPT_DIR}
+	export PATH=${PATH}:${SCRIPT_DIR}
 fi
 
 
@@ -48,7 +48,7 @@ function setjava() {
 	VERSION=$1
 	if [ -z "${VERSION}" ]; then
 		echo "Must specify version {6,7}"
-		return 
+		return
 	fi
 	PARAM="JAVA_HOME${VERSION}"
 	export JAVA_HOME=$(eval "echo \$${PARAM}")
@@ -167,15 +167,15 @@ function base() {
 
     if [ -z "${NEW_SOURCE_ROOT}" ]; then
 		echo "No path for SOURCE_ROOT specified. Not updating"
-		return 
+		return
 	fi
     if [ ! -d "${NEW_SOURCE_ROOT}" ]; then
 		echo "Not a valid path [${NEW_SOURCE_ROOT}] for SOURCE_ROOT specified. Not updating"
-		return 
+		return
 	fi
         if [ "${NEW_SOURCE_ROOT}" == "${SOURCE_ROOT}" ]; then
 		echo "No new path for SOURCE_ROOT specified. Not updating"
-		return 
+		return
 	fi
 	echo "Setting SOURCE_ROOT to: ${NEW_SOURCE_ROOT}"
 	export SOURCE_ROOT=${NEW_SOURCE_ROOT}
@@ -236,8 +236,26 @@ function showjarversion() {
 	unzip -q -c $1 META-INF/MANIFEST.MF
 }
 
+function clone() {
+	cd ${SOURCE_ROOT}
+	git clone git@pogit:$1
+	cd $(basename $1)
+}
+
+function ip() {
+	 ifconfig |grep "inet "  | cut -d\  -f2
+}
+
+function running () {
+	ps -ef | grep $1 | grep -v "grep $1"
+}
+
+function tt() {
+	texttest.py -c $PWD &
+}
 
 . ${SCRIPT_DIR}/environment.completions
+
 
 if [ -z "${SOURCES_ROOT}" ]; then
         echo -en "Environment variable SOURCES_ROOT is not set.\n\nUpdate your .bashrc!!!\n\n\tEg.\n\texport SOURCES_ROOT=~/Source\n"

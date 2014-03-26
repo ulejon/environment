@@ -30,6 +30,15 @@ _base() {
         COMPREPLY=( $(compgen -W "${opts}" -- ${cur}) )
 }
 
+_clone() {
+        local cur prev opts
+        COMPREPLY=()
+        cur="${COMP_WORDS[COMP_CWORD]}"
+        prev="${COMP_WORDS[COMP_CWORD-1]}"
+        opts="$(getrepos.py)"
+
+        COMPREPLY=( $(compgen -W "${opts}" -X '!*'${cur}'*') )
+}
 
 
 complete -F _serverlist deploy
@@ -38,5 +47,6 @@ complete -F _serverlist debug
 complete -F _serverlist run
 complete -F _serverlist jboss
 complete -F _go go
-complete -F _base base 
+complete -F _base base
 
+complete -F _clone clone
