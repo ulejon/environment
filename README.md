@@ -4,17 +4,14 @@ My Environment scripts
 Installation
 ------------
 
-    curl -s https://raw.github.com/pliljenberg/environment/master/install | bash
+    curl -s https://raw.github.com/ulejon/environment/master/install | bash
 
 This will create ~/tools/environment folder with the scripts. Export some environment variables (from `.profile` or similar) and source the `environment.sh` file
     
-	export JAVA_HOME6="/System/Library/Frameworks/JavaVM.framework/Home/"
 	export JAVA_HOME7="/Library/Java/JavaVirtualMachines/jdk1.7.0_11.jdk/Contents/Home/"
-	export JAVA_HOME=${JAVA_HOME6}
-	export JBOSS4_HOME=~/tools/jboss-4.2.1.GA/
+	export JAVA_HOME=${JAVA_HOME7}
 
-	export SOURCES_ROOT=~/Source
-	export SOURCE_ROOT=~/Source/pagero
+	export SOURCES_ROOT=~/source
 	. ~/tools/environment/environment.sh 
 
 
