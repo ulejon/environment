@@ -2,7 +2,7 @@
 
 # Check environment variables
 variables_unset="false"
-ENV_VARIABLES=(JAVA_HOME JBOSS4_HOME, JAVA_HOME7 JAVA_HOME6 SOURCES_ROOT)
+ENV_VARIABLES=(JAVA_HOME JBOSS4_HOME, JAVA_HOME8 JAVA_HOME7 JAVA_HOME6 SOURCES_ROOT)
 for variable in ${ENV_VARIABLES[*]}
 do
 	value=$(eval "echo \$${variable}")
@@ -47,7 +47,7 @@ function setjava() {
 
 	VERSION=$1
 	if [ -z "${VERSION}" ]; then
-		echo "Must specify version {6,7}"
+		echo "Must specify version {6,7,8}"
 		return
 	fi
 	PARAM="JAVA_HOME${VERSION}"
