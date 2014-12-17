@@ -254,6 +254,38 @@ function tt() {
 	texttest.py -c $PWD &
 }
 
+function getmissingformdef() {
+
+	DATA_BASE_PATH=$1
+	if [ -z "${DATA_BASE_PATH}" ]; then
+		echo "Must specify base path for data"
+		return
+	fi
+
+	FORM_DEF_TO_DOWNLOAD=$2
+	if [ -z "${FORM_DEF_TO_DOWNLOAD}" ]; then
+		echo "Must specify id of form definition to download"
+		return
+	fi
+
+	REMOTE_DATA_PATH=$3
+	if [ -z "${REMOTE_DATA_PATH}" ]; then
+		echo "Must specify remote path to the data folder"
+		return
+	fi
+
+	while [ ! -e ${DATA_BASE_PATH}  ]; do
+		echo "Path ${DATA_BASE_PATH} does not exist"
+		return
+	done
+
+	scp -r ${REMOTE_DATA_PATH}/forms/${FORM_DEF_TO_DOWNLOAD} ${DATA_BASE_PATH}/forms
+	scp -r ${REMOTE_DATA_PATH}/public/forms/${FORM_DEF_TO_DOWNLOAD} ${DATA_BASE_PATH}/public/forms
+
+	echo "All done"
+}
+
+
 . ${SCRIPT_DIR}/environment.completions
 
 
