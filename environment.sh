@@ -293,3 +293,8 @@ if [ -z "${SOURCES_ROOT}" ]; then
         echo -en "Environment variable SOURCES_ROOT is not set.\n\nUpdate your .bashrc!!!\n\n\tEg.\n\texport SOURCES_ROOT=~/Source\n"
         tput sgr0
 fi
+
+KAFKA_SCRIPTS="${SCRIPT_DIR}/kafka.sh"
+if [ -f "$KAFKA_SCRIPTS" ]; then
+	. ${KAFKA_SCRIPTS}
+fi
