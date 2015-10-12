@@ -1,5 +1,15 @@
 #!/bin/bash
 
+function stopZoo() {
+	echo "Stopping zookeeper"
+	zkServer stop
+}
+
+function startZoo() {
+	echo "Starting zookeeper"
+	zkServer start
+}
+
 function cleanZoo() {
 	ZOOKEPER_DATA_DIR=/usr/local/var/run/zookeeper/data/version-2
 
@@ -14,6 +24,11 @@ function cleanZoo() {
 	rm -rf *
 
 	echo "all done"
+}
+
+function startKafka() {
+	echo "Starting kafka"
+	kafka-server-start.sh /usr/local/etc/kafka/server.properties
 }
 
 function cleanKafkaLogs() {
