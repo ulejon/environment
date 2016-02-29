@@ -285,6 +285,68 @@ function getmissingformdef() {
 	echo "All done"
 }
 
+function downloadFormdef() {
+
+	REMOTE_DATA_PATH=$1
+	if [ -z "${REMOTE_DATA_PATH}" ]; then
+		echo "Must specify remote path to the data folder"
+		return
+	fi
+
+	DATA_BASE_PATH=$2
+	if [ -z "${DATA_BASE_PATH}" ]; then
+		echo "Must specify base path for data"
+		return
+	fi
+
+	FORM_DEF_TO_DOWNLOAD=$3
+	if [ -z "${FORM_DEF_TO_DOWNLOAD}" ]; then
+		echo "Must specify id of form definition to download"
+		return
+	fi
+
+	while [ ! -e ${DATA_BASE_PATH}  ]; do
+		echo "Path ${DATA_BASE_PATH} does not exist"
+		return
+	done
+
+	scp -r ${REMOTE_DATA_PATH}/forms/${FORM_DEF_TO_DOWNLOAD}/formDef.xlsx ${DATA_BASE_PATH}/${FORM_DEF_TO_DOWNLOAD}/
+
+	echo "All done"
+}
+
+
+function uploadDC() {
+	SERVER=$1
+  	
+  	if [ -z "${SERVER}" ]; then
+		echo "No server specified, using dev"
+		SERVER="dev"
+	fi
+
+    PATH_TO_ZIP=${SOURCES_ROOT}/datacollect-backend/modules/monolith/target/universal
+    ZIP_FILE=`find ${PATH_TO_ZIP} -type f -name '*.zip'`
+    SERVER_DEPLOY_PATH=${SERVER}:/var/webapps/
+	
+	PACKAGE_NAME=${ZIP_FILE##*/}
+	PACKAGE_NAME=${PACKAGE_NAME%.zip}
+
+	echo "Zip file is: ${ZIP_FILE}"
+	echo "Package name is: ${PACKAGE_NAME}"
+
+	while [ ! -e ${ZIP_FILE}  ]; do
+		echo "Package (zip) does not exist"
+		return
+	done
+
+	echo "Uploading ${ZIP_FILE} to: ${SERVER_DEPLOY_PATH}"
+
+	scp ${ZIP_FILE} ${SERVER_DEPLOY_PATH}
+
+	OLD_PACKAGE_NAME=${PACKAGE_NAME}-old
+	ssh ${SERVER} "cd /var/webapps && mv ${PACKAGE_NAME} ${OLD_PACKAGE_NAME} && unzip ${PACKAGE_NAME}.zip && cd ${OLD_PACKAGE_NAME} && ../stop-dc.sh && cd .. && cd ${PACKAGE_NAME} && ../start-dc.sh && cd .. && rm ${PACKAGE_NAME}.zip && rm -rf ${OLD_PACKAGE_NAME}"
+}
+
 
 . ${SCRIPT_DIR}/environment.completions
 
