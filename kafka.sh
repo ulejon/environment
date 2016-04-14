@@ -28,7 +28,7 @@ function cleanZoo() {
 
 function startKafka() {
 	echo "Starting kafka"
-	kafka-server-start.sh /usr/local/etc/kafka/server.properties
+	kafka-server-start /usr/local/etc/kafka/server.properties
 }
 
 function cleanKafkaLogs() {
