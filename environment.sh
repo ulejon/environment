@@ -12,7 +12,7 @@ do
 	fi
 	#debug....echo "${variable}=${value}"
 done
-if [ "true" == "${variables_unset}" ]; then
+if [ 'true' '==' '${variables_unset}' ]; then
 	echo "Not all necessary environment variables set, exiting..."
 	return
 fi
